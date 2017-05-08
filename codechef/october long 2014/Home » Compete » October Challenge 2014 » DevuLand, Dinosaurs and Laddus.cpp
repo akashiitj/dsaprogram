@@ -1,0 +1,61 @@
+#include<bits/stdc++.h>
+using namespace std;
+long long fp(long long a[],long long ml,long long i)
+{   int ti=i+1;
+    while(ti<ml)
+    {
+     if(a[ti]>0)return ti;
+    ti++;
+    }
+    return ml;
+}
+long long fn(long long a[],long long ml,long long i)
+{
+    int ti=i+1;
+    while(ti<ml)
+    {
+     if(a[ti]<0) {return ti;}
+    ti++;
+    }
+    return ml;
+}
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    long long t,n,i,j;
+    cin>>t;
+    while(t>0)
+    {
+        cin>>n;
+        long long a[n],sum=0;
+
+
+        for( i=0; i<n; i++)
+            cin>>a[i];
+        long long i=fn(a,n,-1),c=0;
+        long long j=fp(a,n,-1);
+
+        while(i<n&&j<n)
+        {
+            if(abs(a[i])>=a[j])
+            {
+                sum=sum+(abs(i-j)*abs(a[j]));
+                a[i]=a[i]+a[j];
+                a[j]=0;
+                j=fp(a,n,j);
+            }
+           else if(abs(a[i])<a[j])
+            {
+                sum=sum+(abs(i-j)*abs(a[i]));
+                a[j]=a[j]+a[i];
+                a[i]=0;
+                i=fn(a,n,i);
+            }
+
+        }
+        cout<<sum<<endl;
+        t--;
+    }
+    return 0;
+}
+

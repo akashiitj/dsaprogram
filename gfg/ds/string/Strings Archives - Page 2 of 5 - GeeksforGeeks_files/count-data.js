@@ -1,0 +1,5 @@
+var DISQUSWIDGETS;
+
+if (typeof DISQUSWIDGETS != 'undefined') {
+    DISQUSWIDGETS.displayCount({"text":{"and":"and","comments":{"zero":"0 Comments","multiple":"{num} Comments","one":"1 Comment"}},"counts":[{"id":"132098 http:\/\/www.geeksforgeeks.org\/?p=132098","comments":2},{"id":"130280 http:\/\/www.geeksforgeeks.org\/?p=130280","comments":58},{"id":"128620 http:\/\/www.geeksforgeeks.org\/?p=128620","comments":43},{"id":"131992 http:\/\/www.geeksforgeeks.org\/?p=131992","comments":7},{"id":"132051 http:\/\/www.geeksforgeeks.org\/?p=132051","comments":3},{"id":"131732 http:\/\/www.geeksforgeeks.org\/?p=131732","comments":37},{"id":"131899 http:\/\/www.geeksforgeeks.org\/?p=131899","comments":8},{"id":"130351 http:\/\/www.geeksforgeeks.org\/?p=130351","comments":110},{"id":"131035 http:\/\/www.geeksforgeeks.org\/?p=131035","comments":14},{"id":"130318 http:\/\/www.geeksforgeeks.org\/?p=130318","comments":54}]});
+}

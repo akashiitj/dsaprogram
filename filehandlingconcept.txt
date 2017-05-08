@@ -1,0 +1,9 @@
+<fstream> we have to include it it contain essential file related to file input and output.
+three operation we can do with a file
+ifstream inputobject("filename")
+* with the help of input object we can take input from file.
+ofstream outputobject("filenam")
+* with help of it we can write something in file;
+fstream input output("filname")
+*we can do both;
+read page 543;
