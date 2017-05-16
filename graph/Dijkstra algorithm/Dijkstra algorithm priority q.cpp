@@ -80,7 +80,7 @@ void da(int sv)
             if(vis[vn]==0&&mindis[vn]>mindis[sv]+g[sv][i].first)
             {
                 mindis[vn]=mindis[sv]+g[sv][i].first;
-                mi.push(g[sv][i]);
+                mi.push({mindis[vn],vn});
             }
         }
 
