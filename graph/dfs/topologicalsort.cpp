@@ -37,7 +37,7 @@ ll mod= 1000000007;
 
 vi g[100];
 int vis[100]= {};
-int ht[100]={};
+int ht[100]={};//for tracking when you are traversing from some node, after traversing all node from this it will be marked as untravrese
 
 vi ts;
 
