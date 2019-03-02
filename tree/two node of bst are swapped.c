@@ -1,99 +1,129 @@
-#include<stdio.h>
-//using namespace std;
-struct node
-{
-    int data;
-    struct node *l;
-    struct node *r;
-};
-struct node *newnode(int data)
-{
-    struct node *temp=(struct node *) malloc(sizeof(struct node));
-    temp->data=data;
-    temp->l=NULL;
-    temp->r=NULL;
-    return temp;
-}
-void inorder(struct node *root)
-{
-    if(root==NULL)
-        return;
-    inorder(root->l);
-    printf("%d ",root->data);
+// Two nodes in the BST's swapped, correct the BST. 
+#include <stdio.h> 
+#include <stdlib.h> 
 
-    inorder(root->r);
-}
+/* A binary tree node has data, pointer to left child 
+and a pointer to right child */
+struct node 
+{ 
+	int data; 
+	struct node *left, *right; 
+}; 
 
-/*void correcting_bst(struct node *root,struct node *r,struct node a[],int *i)//to keep record
-{
-    if(root==NULL)
-        return ;
-     //printf("1 ");
-    correcting_bst(root->l,r,a,i);
-    if(r->data>root->data)
-    {   if((*i)++==0)
-       a[*i]=*r;
-        else a[*i]=*root;
-    }
-//printf("1 ");
-r->data=root->data;
-    correcting_bst(root->r,r,a,i);
-    //return 1;
-}*/
-void correcting_bst(struct node *root,struct node **r,struct node **a,struct node **a1,int *i)//to keep record
-{
-    if(root==NULL)
-        return ;
+// A utility function to swap two integers 
+void swap( int* a, int* b ) 
+{ 
+	int t = *a; 
+	*a = *b; 
+	*b = t; 
+} 
 
-    correcting_bst(root->l,r,a,a1,i);
-    if((*r)->data>root->data)
-    {
-        if(((*i)++)==0)
-        {
-            *a=*r;
-            *a1=root;
-        }
-        else
-        {
-            i++;
-            int x=(*a)->data;
-            (*a)->data=root->data;
-            root->data=x;
-        }
+/* Helper function that allocates a new node with the 
+given data and NULL left and right pointers. */
+struct node* newNode(int data) 
+{ 
+	struct node* node = (struct node *)malloc(sizeof(struct node)); 
+	node->data = data; 
+	node->left = NULL; 
+	node->right = NULL; 
+	return(node); 
+} 
 
-    }
+// This function does inorder traversal to find out the two swapped nodes. 
+// It sets three pointers, first, middle and last. If the swapped nodes are 
+// adjacent to each other, then first and middle contain the resultant nodes 
+// Else, first and last contain the resultant nodes 
+void correctBSTUtil( struct node* root, struct node** first, 
+					struct node** middle, struct node** last, 
+					struct node** prev ) 
+{ 
+	if( root ) 
+	{ 
+		// Recur for the left subtree 
+		correctBSTUtil( root->left, first, middle, last, prev ); 
 
-    *r=root;
-    correcting_bst(root->r,r,a,a1,i);
-    //return 1;
-}
+		// If this node is smaller than the previous node, it's violating 
+		// the BST rule. 
+		if (*prev && root->data < (*prev)->data) 
+		{ 
+			// If this is first violation, mark these two nodes as 
+			// 'first' and 'middle' 
+			if ( !*first ) 
+			{ 
+				*first = *prev; 
+				*middle = root; 
+			} 
 
-main()
-{
+			// If this is second violation, mark this node as last 
+			else
+				*last = root; 
+		} 
 
-    struct node* root=newnode(120);
-    struct node* r=(struct node*)malloc(sizeof(struct node));
-    r->data=0;
+		// Mark this node as previous 
+		*prev = root; 
 
-    root->l=newnode(5);
-    root->r=newnode(15);
-    root->l->r=newnode(9);
-    root->l->l=newnode(2);
-    root->r->r=newnode(10);
-    root->r->l=newnode(11);
-    struct node *a,*a1;
-    int i=0;
-    inorder(root);
-    printf("\n ");
-    correcting_bst(root,&r,&a,&a1,&i);
-    if(i!=2)
-    {
-        int x=(a1)->data;
-        printf("%d\n",(a1)->data);
-        (a1)->data=(a)->data;
-        (a)->data=x;
-    }
-    inorder(root);
+		// Recur for the right subtree 
+		correctBSTUtil( root->right, first, middle, last, prev ); 
+	} 
+} 
 
-}
+// A function to fix a given BST where two nodes are swapped. This 
+// function uses correctBSTUtil() to find out two nodes and swaps the 
+// nodes to fix the BST 
+void correctBST( struct node* root ) 
+{ 
+	// Initialize pointers needed for correctBSTUtil() 
+	struct node *first, *middle, *last, *prev; 
+	first = middle = last = prev = NULL; 
 
+	// Set the poiters to find out two nodes 
+	correctBSTUtil( root, &first, &middle, &last, &prev ); 
+
+	// Fix (or correct) the tree 
+	if( first && last ) 
+		swap( &(first->data), &(last->data) ); 
+	else if( first && middle ) // Adjacent nodes swapped 
+		swap( &(first->data), &(middle->data) ); 
+
+	// else nodes have not been swapped, passed tree is really BST. 
+} 
+
+/* A utility function to print Inoder traversal */
+void printInorder(struct node* node) 
+{ 
+	if (node == NULL) 
+		return; 
+	printInorder(node->left); 
+	printf("%d ", node->data); 
+	printInorder(node->right); 
+} 
+
+/* Driver program to test above functions*/
+int main() 
+{ 
+	/* 6 
+		/ \ 
+	10 2 
+	/ \ / \ 
+	1 3 7 12 
+	10 and 2 are swapped 
+	*/
+
+	struct node *root = newNode(6); 
+	root->left	 = newNode(10); 
+	root->right	 = newNode(2); 
+	root->left->left = newNode(1); 
+	root->left->right = newNode(3); 
+	root->right->right = newNode(12); 
+	root->right->left = newNode(7); 
+
+	printf("Inorder Traversal of the original tree \n"); 
+	printInorder(root); 
+
+	correctBST(root); 
+
+	printf("\nInorder Traversal of the fixed tree \n"); 
+	printInorder(root); 
+
+	return 0; 
+} 
