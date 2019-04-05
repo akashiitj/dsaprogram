@@ -130,3 +130,86 @@ int main()
 }
 
 
+
+
+
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<vector<int>> g,wgt;
+vector<int> topo,d;
+vector<bool> vis,tempVis;
+
+void addEdge(int u, int v, int weight) {
+  g[u].push_back(v);
+  wgt[u].push_back(weight);
+}
+
+bool ts(int node){
+  vis[node] = true;
+  tempVis[node] = true;
+  for(int i=0;i<g[node].size();i++){
+  	int adjNode = g[node][i];
+    if(!vis[adjNode]){
+    	if(!ts(adjNode))
+          return false;
+    }else if(tempVis[adjNode]){
+    	return false;
+    }
+  }
+  topo.push_back(node);
+  tempVis[node] = false;
+  return true;
+
+}
+
+ 
+int main() 
+{ 
+	// Create a graph given in the above diagram. 
+	// Here vertex numbers are 0, 1, 2, 3, 4, 5 with 
+	// following mappings: 
+	// 0=r, 1=s, 2=t, 3=x, 4=y, 5=z 
+	g.resize(6);
+    wgt.resize(6);
+    d.resize(6,0);
+    vis.resize(6,false);
+    tempVis.resize(6,false);
+   
+    addEdge(0, 1, 5); 
+    addEdge(0, 2, 3); 
+    addEdge(1, 3, 6); 
+    addEdge(1, 2, 2); 
+    addEdge(2, 4, 4); 
+    addEdge(2, 5, 2); 
+    addEdge(2, 3, 7); 
+    addEdge(3, 5, 1); 
+    addEdge(3, 4, -1); 
+    addEdge(4, 5, -2); 
+  
+    if(ts(1)){
+      cout<<"Possible\n";
+      
+      reverse(topo.begin(),topo.end());
+      
+      for(int i=0;i<topo.size();i++){
+      	int cur = topo[i];
+      	for(int j=0;j<g[cur].size();j++){
+      		int adj = g[cur][j];
+      		d[adj]=max(d[adj],d[cur]+wgt[cur][j]);
+      	}
+      }
+      for(int i=0;i<d.size();i++){
+      	cout<<d[i]<<" ";
+      }
+    }else {
+      cout<<"notPossible";
+    } 
+
+	return 0; 
+} 
+
