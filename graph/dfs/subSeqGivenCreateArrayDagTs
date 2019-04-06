@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<int> dag[100];
+vector<int> stck;
+vector<bool> vis(100,false),tempVis(100,false);
+
+
+bool ts(int curNode){
+    vis[curNode] = true;
+    tempVis[curNode] = true;
+    
+    for(auto adjNode:dag[curNode]){
+        if(!vis[adjNode]){
+            if(!ts(adjNode))
+                return false;
+        }else if(tempVis[adjNode]){
+            return false;
+        }
+    }
+    tempVis[curNode] = false;
+    stck.push_back(curNode);
+    return true;
+}
+
+int main() {
+	int n,i,nj,j,start,end,node;
+	cout<<"Enter no of subsq\n";
+	cin>>n;
+	for(i=0;i<n;i++){
+	    cout<<"Enter length of subsq " << i << "\n";
+	    cin>>nj;
+	    for(j=0;j<nj;j++){
+	        cin>>node;
+	        if(j!=0){
+	            end = node;
+	            dag[start].push_back(end);
+	        }
+	        start = node;
+	    }
+	}
+	
+	if(ts(1)){
+	    reverse(stck.begin(),stck.end());
+	    for(auto i:stck){
+	        cout<<i<<" ";
+	    }
+	}else{
+	    cout<<"not possible\n";
+	}
+}
