@@ -1,0 +1,62 @@
+// Program to find the maximum profit job sequence from a given array 
+// of jobs with deadlines and profits 
+//https://www.geeksforgeeks.org/job-sequencing-problem-set-1-greedy-algorithm/
+#include<bits/stdc++.h>
+using namespace std;
+
+
+// A structure to represent a job 
+struct Job 
+{ 
+char id;	 // Job Id 
+int dead; // Deadline of job 
+int profit; // Profit if job is over before or on deadline 
+}; 
+
+// This function is used for sorting all jobs according to profit 
+bool comparison(Job a, Job b) 
+{ 
+	return (a.profit > b.profit); 
+} 
+
+// Returns minimum number of platforms reqquired 
+void printJobScheduling(Job arr[], int n) 
+{ 
+	// Sort all jobs according to decreasing order of prfit 
+	sort(arr, arr+n, comparison); 
+    vector<char> ans;
+  	set<int> s;
+    set<int>::iterator itr;
+	// Initialize all slots to be free 
+	for (int i=0; i<n; i++) 
+		s.insert(i+1);
+
+	// Iterate through all given jobs 
+	for (int i=0; i<n; i++) 
+	{ 
+	    if(s.empty())break;
+	    if(*(s.begin())<=arr[i].dead){
+	        ans.push_back(arr[i].id);
+    	    itr = s.lower_bound(arr[i].dead);//log n
+    	    if(itr==s.end() || (*itr>arr[i].dead)){
+    	        s.erase(--itr);
+    	    }else{
+    	        s.erase(itr);
+    	    }
+	    }
+	} 
+	for (int i=0; i<ans.size(); i++) {
+	    cout<<ans[i]<<" "; 
+	}
+} 
+
+// Driver program to test methods 
+int main() 
+{ 
+	Job arr[] = { {'a', 2, 100}, {'b', 1, 19}, {'c', 2, 27}, 
+				{'d', 1, 25}, {'e', 3, 15}}; 
+	int n = sizeof(arr)/sizeof(arr[0]); 
+	cout << "Following is maximum profit sequence of jobsn \n"; 
+	printJobScheduling(arr, n); 
+	return 0; 
+} 
