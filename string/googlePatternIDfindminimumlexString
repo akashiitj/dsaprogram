@@ -1,0 +1,46 @@
+//https://www.geeksforgeeks.org/form-minimum-number-from-given-sequence/
+
+// C++ program to print minimum number that can be formed 
+// from a given sequence of Is and Ds 
+#include <bits/stdc++.h> 
+using namespace std; 
+
+// Function to decode the given sequence to construct 
+// minimum number without repeated digits 
+void PrintMinNumberForPattern(string seq) 
+{ 
+	int n = seq.length();
+  	string ans;
+    seq = 'I'+seq;
+    for(int i=0;i<=n;i++){
+    	ans += (char)('1'+i);
+    }
+  	int start=-1,end=-1,i=n;
+    while(i>=0){
+    	if(seq[i]=='D'&&end==-1){
+        	end = i;
+        }else if(seq[i]=='I'&&end!=-1){
+        	start = i;
+        }
+      	if(start!=-1 && end!=-1){
+        	reverse(ans.begin()+start,ans.begin()+end+1);
+          	start = end = -1;
+        }
+        i--;
+    }
+    cout<<ans<<"\n";
+    
+} 
+
+// main function 
+int main() 
+{ 
+	PrintMinNumberForPattern("IDID"); 
+	PrintMinNumberForPattern("I"); 
+	PrintMinNumberForPattern("DD"); 
+	PrintMinNumberForPattern("II"); 
+	PrintMinNumberForPattern("DIDI"); 
+	PrintMinNumberForPattern("IIDDD"); 
+	PrintMinNumberForPattern("DDIDDIID"); 
+	return 0; 
+} 
