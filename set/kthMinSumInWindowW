@@ -1,0 +1,86 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+void printMinMaxSum(vector<int> input,int w,int k){
+    set<int> s;
+    int n = input.size(),c;
+    int minKSum = 0;
+    int maxKSum = 0;
+    int kthMin,kthMax,removeElement;
+    for(int i=0;i<w;i++){
+        s.insert(input[i]);
+    }
+    auto it = s.begin();
+    for(c=0;c!=k;it++,c++){
+        minKSum = minKSum + *it;
+        kthMin = *it;
+    }
+    it = s.end();
+    --it;
+    for(c=0;c!=k;it--,c++){
+        maxKSum = maxKSum + *it;
+        kthMax = *it;
+    }
+    cout<<minKSum<<" "<<maxKSum<<"\n";
+    for(int i=w;i<n;i++){
+        removeElement = input[i-w];
+        s.erase(removeElement);
+        s.insert(input[i]);
+        if(removeElement<kthMin){
+            minKSum-=removeElement;
+            if(input[i]<kthMin){
+                minKSum+=input[i];
+            }else{
+                it = s.find(kthMin);
+                it++;
+                kthMin = *it;
+                minKSum+=kthMin;
+            }
+        }else{
+            if(input[i]<kthMin){
+                minKSum+=input[i];
+                it = s.find(kthMin);
+                minKSum-=kthMin;
+                kthMin = *(--it);
+            }
+        }
+        
+        
+        if(removeElement>kthMax){
+            maxKSum-=removeElement;
+            if(input[i]>kthMax){
+                maxKSum+=input[i];
+            }else{
+                it = s.find(kthMax);
+                it--;
+                kthMax = *it;
+                maxKSum+=kthMax;
+            }
+        }else{
+            if(input[i]>kthMax){
+                maxKSum+=input[i];
+                it = s.find(kthMax);
+                maxKSum-=kthMax;
+                kthMax = *(++it);
+            }
+        }
+        
+        cout<<minKSum<<" "<<maxKSum<<"\n";
+    }
+}
+
+int main() {
+	int n,w,k,x;
+	cin>>n>>w>>k;
+	vector<int> input;
+	for (int i = 0; i < n; i++) {
+	    cin>>x;
+	    input.push_back(x);
+	}
+	printMinMaxSum(input,w,k);
+	return 0;
+}
+
+//10 5 3 
+//10 70 30 40 50 60 20 80 90 100
