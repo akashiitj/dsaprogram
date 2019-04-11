@@ -1,0 +1,45 @@
+//https://www.interviewbit.com/problems/max-rectangle-in-binary-matrix/
+
+vector<int> findNextSmallest(vector<int> v){
+    int n = v.size(),cur;
+    vector<int> stck;
+    vector<int> ans(n,n);
+    for(auto i=0;i<n;i++){
+        cur = v[i];
+        while(!stck.empty()&&v[stck.back()]>cur){
+            ans[stck.back()] = i;
+            stck.pop_back();
+        }
+        stck.push_back(i);
+    }
+    return ans;
+}
+
+int maxHistogram(vector<int> v){
+    vector<int> nsl,nsr;
+    int n = v.size(),ans=0;
+    nsr = findNextSmallest(v);
+    reverse(v.begin(),v.end());
+    nsl = findNextSmallest(v);
+    reverse(nsl.begin(),nsl.end());
+    reverse(v.begin(),v.end());
+    for(auto i=0;i<nsl.size();i++){
+        nsl[i] = (n-nsl[i]-1);
+        ans=max(ans,(nsr[i]-nsl[i]-1)*v[i]);
+    }
+    return ans;
+}
+
+int Solution::maximalRectangle(vector<vector<int> > &A) {
+    int ans=0,i=0;
+    vector<int> tempV(A[0].size(),0);
+    for(auto v:A){
+        i=0;
+        for(auto val:v){
+            tempV[i] = (val==1?(val+tempV[i]):0);
+            i++;
+        }
+        ans=max(ans,maxHistogram(tempV));
+    }
+    return ans;
+}
