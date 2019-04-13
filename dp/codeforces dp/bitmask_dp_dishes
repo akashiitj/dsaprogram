@@ -1,0 +1,50 @@
+//https://codeforces.com/contest/580/problem/D
+#include<bits/stdc++.h>
+using namespace std;
+
+#define maX(a,b)                     ( (a) > (b) ? (a) : (b))
+
+int main()
+{
+    long long n,m,k,x,y,c,i,j,preMask,mask,dish,lastDish;
+    cin>>n>>m>>k;
+    long long ans=0,a[n],rules[n][n],dp[1<<n][n]={0},g[n][n];//i represent set of dishes, j represent last dish taken
+    for(i=0;i<n;i++)
+    {
+        cin>>a[i];
+    }
+    memset(dp,0,sizeof(dp));
+    memset(g,0,sizeof(g));
+    for(i=0;i<k;i++)
+    {
+        cin>>x>>y>>c;
+        x--;
+        y--;
+        g[x][y]=c;
+
+    }
+
+    for(i=0;i<n;i++)
+        dp[1LL<<i][i]=a[i];
+
+    for(mask=1;mask<(1LL<<n);mask++){
+        for(dish=0;dish<n;dish++){
+            if(mask & (1LL<<dish)){
+               preMask = (mask - (1LL<<dish));
+               for(lastDish = 0;lastDish<n;lastDish++){
+                   if(dish==lastDish)continue;
+                   if((1<<lastDish) & preMask)
+                        dp[mask][dish] = maX(dp[mask][dish],dp[preMask][lastDish]+a[dish]+g[lastDish][dish]);
+               }
+            }
+            if(__builtin_popcount(mask)==m)
+            {
+                ans=maX(ans,dp[mask][dish]);
+            }
+        }
+    }
+    
+    cout<<ans<<"\n";
+
+    return 0;
+}
