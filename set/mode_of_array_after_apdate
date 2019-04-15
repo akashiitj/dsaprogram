@@ -1,0 +1,62 @@
+You are given an array of N positive integers, A1, A2 ,…, AN.
+Also, given a Q updates of form:
+
+    i j: Update Ai = j. 1 ≤ i ≤ N.
+
+Perform all updates and after each such update report mode of the array. Therefore, return an array of Q elements, where ith element is mode of the array after ith update has been executed.
+
+Notes
+
+    Mode is the most frequently occuring element on the array.
+    If multiple modes are possible, return the smallest one.
+    Update array input is via a Q*2 array, where each row represents a update.
+
+
+
+vector<int> Solution::getMode(vector<int> &A, vector<vector<int> > &B) {
+    vector<int> ans;
+    pair<int,int> tp;
+    auto cmp = [](pair<int,int> a, pair<int,int> b) { 
+        if(a.first==b.first){
+            return a.second<b.second;
+        }
+        return a.first>b.first; 
+    };
+    set<pair<int,int>,decltype(cmp)> s(cmp);
+    set<pair<int,int>>::iterator sIt;
+    map<int,int> f;
+    map<int,set<pair<int,int>>::iterator> m;
+    int updateIndex;
+    int updatedValue;
+    int privValue;
+    for(auto val:A){
+        f[val]++;
+    }
+    for(auto it=f.begin();it!=f.end();it++){
+        m[it->first] = s.insert({it->second,it->first}).first;
+    }
+    
+    for(auto val:B){
+        updateIndex = val[0]-1;
+        updatedValue = val[1];
+        privValue = A[updateIndex];
+        sIt = m[privValue];
+        m[privValue] = s.insert({((*sIt).first)-1,(*sIt).second}).first;
+        s.erase(sIt);
+        auto mIt = m.find(updatedValue);
+        if(mIt==m.end()){
+            m[updatedValue] = s.insert({1,updatedValue}).first;
+        }else{
+            sIt = m[updatedValue];
+            m[updatedValue] = s.insert({((*sIt).first)+1,(*sIt).second}).first;
+            s.erase(sIt);
+        }
+        sIt = s.begin();
+        //sIt--;
+        ans.push_back((*sIt).second);
+        A[updateIndex] = updatedValue;
+    }
+    
+    return ans;
+    
+}
