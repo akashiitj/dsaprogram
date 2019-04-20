@@ -1,0 +1,26 @@
+//https://leetcode.com/problems/reconstruct-itinerary/submissions/
+class Solution {
+public:
+    unordered_map<string,multiset<string>> g;
+    vector<string> ans;
+    string adjNode;    
+    
+    void ts(string curNode){
+        //cout<<curNode <<" "<<g[curNode].size()<<" ";
+        while(!g[curNode].empty()){
+            adjNode = *(g[curNode].begin());
+            g[curNode].erase(g[curNode].begin());
+            ts(adjNode);
+        }
+        ans.push_back(curNode);
+    }
+    
+    vector<string> findItinerary(vector<pair<string, string>> tickets) {
+        for(auto val:tickets){
+            g[val.first].insert(val.second);
+        }
+        ts("JFK");
+        reverse(ans.begin(),ans.end());
+        return ans;
+    }
+};
