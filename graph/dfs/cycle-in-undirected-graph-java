@@ -1,0 +1,48 @@
+public class Solution {
+    HashMap<Integer, ArrayList<Integer>> graph;
+    boolean[] visited, tempVisted;
+
+    void intializeGraph(int nodeCount) {
+        graph = new HashMap<>();
+        visited = new boolean[nodeCount + 1];
+        tempVisted = new boolean[nodeCount + 1];
+        Arrays.fill(visited, false);
+        Arrays.fill(tempVisted, false);
+        for (int node = 1; node <= nodeCount; node++) {
+            graph.put(node, new ArrayList<>());
+        }
+    }
+
+    void constructGraph(int nodeCount, ArrayList<ArrayList<Integer>> B) {
+        for (ArrayList<Integer> edge : B) {
+            graph.get(edge.get(0)).add(edge.get(1));
+            graph.get(edge.get(1)).add(edge.get(0));
+        }
+    }
+
+    int isCycle(int source, int parent) {
+        visited[source] = true;
+        for (int adjacentNode : graph.get(source)) {
+            if (!visited[adjacentNode]) {
+                if (isCycle(adjacentNode, source)==1) {
+                    return 1;
+                }
+            } else if (adjacentNode != parent) {
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    public int solve(int A, ArrayList<ArrayList<Integer>> B) {
+        intializeGraph(A);
+        constructGraph(A, B);
+        for (int node = 1; node <= A; node++) {
+            if (!visited[node] && isCycle(node, -1)==1) {
+                return 1;
+            }
+        }
+        return 0;
+    }
+    
+}
