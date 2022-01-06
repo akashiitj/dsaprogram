@@ -1,0 +1,51 @@
+package Codes;
+
+import java.util.*;
+
+
+//given a string encoding: a1b2c2 (lower case alphabets followed with their count)= abbcc
+//Write an iterator for the same with functions next()(should return the next character) and hasnext()(should tell if the next character exists).
+
+class CombinationIterator {
+
+    String encoding;
+    int charPos = -1;
+    int curCharCount = 0;
+    char curChar = ' ';
+    public CombinationIterator(String string) {
+        encoding = string;
+        if(encoding.length()>0){
+            charPos=0;
+        }
+    }
+    public char next() {
+        if(hasNext()){
+            curChar = encoding.charAt(charPos);
+            charPos++;
+            int countChar = 0;
+            while(hasNext() && ((int)encoding.charAt(charPos)-48)>=0 && ((int)encoding.charAt(charPos)-48) <=9){
+                countChar = countChar*10 + (int)encoding.charAt(charPos)-48;
+                charPos++;
+            }
+            curCharCount = countChar;
+            return curChar;
+        }
+        return ' ';
+    }
+    public synchronized boolean hasNext() {
+        return charPos >=0 && charPos < encoding.length() ? true : false;
+    }
+
+    public static void main(String[] args) {
+        CombinationIterator itr = new CombinationIterator("a1b2c2");
+        StringBuilder sb = new StringBuilder();
+        while (itr.hasNext()){
+            char cur = itr.next();
+            for(int i=0;i< itr.curCharCount;i++){
+                sb.append(cur);
+            }
+        }
+        System.out.println(sb.toString());
+
+    }
+}
